@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CancerNet+</title>
+</head>
+<body>
+
+<h1>CancerNet+ Breast Cancer Detection</h1>
+
+<input type="file" id="fileInput">
+<button onclick="uploadImage()">Analyse</button>
+
+<div id="result"></div>
+
+<script>
+async function uploadImage() {
+    const file = document.getElementById('fileInput').files[0];
+
+    if (!file) {
+        alert("Please select an image first");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+    });
+
+    const data = await response.json();
+
+    document.getElementById('result').innerHTML =
+        `<h2>${data.label}</h2>
+         <p>Confidence: ${data.confidence}%</p>`;
+}
+</script>
+
+</body>
+</html>
